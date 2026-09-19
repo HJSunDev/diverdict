@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "diverdict": {
+      "command": "node",
+      "args": ["/absolute/path/to/diverdict/dist/cli.js"]
+    }
+  }
+}
