@@ -1,10 +1,10 @@
-# 异策 · Diverdict
+# 三思 · Diverdict
 
 **三家独立出策，交叉质询，一锤定策。**
 
 [English](README.en.md) · [文档入口](docs/README.md) · [接入指南](docs/engineering/clients.md) · [工具协议](docs/architecture/protocol.md) · [架构](docs/architecture/README.md) · [贡献](CONTRIBUTING.md) · [MIT](LICENSE)
 
-异策（Diverdict）是一个轻量的 MCP server。战略家看时间，纵横家看关系，阴谋家看风险；三家各自出策、交叉质询，再由贾诩结合全部材料给出最终方略及最脆弱的一环。
+三思（Diverdict）是一个轻量的 MCP server。战略家看时间，纵横家看关系，阴谋家看风险；三家各自出策、交叉质询，再由贾诩结合全部材料给出最终方略及最脆弱的一环。
 
 模型、认证和生成能力来自你正在使用的智能体。服务只负责提示词拼装与流程推进，无模型 API、无 API key、无遥测、无远程后端。
 
@@ -69,7 +69,7 @@ Codex 负责选择自己的隔离执行机制并完成生成，不需要你手�
 
 ## 名称
 
-产品名为「异策 · Diverdict」，仓库、目录、npm 包、命令行入口与 MCP 服务标识统一使用 `diverdict`。Diverdict 结合 diverge（分歧）与 verdict（裁断）的词意，表达从分歧走向决断。原始核心及交接文档保留历史名称，不随产品改名重写。
+产品名为「三思 · Diverdict」，仓库、目录、npm 包、命令行入口与 MCP 服务标识统一使用 `diverdict`。Diverdict 结合 diverge（分歧）与 verdict（裁断）的词意，表达从分歧走向决断。原始核心及交接文档保留历史名称，不随产品改名重写。
 
 ## 核心资产
 

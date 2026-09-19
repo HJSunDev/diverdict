@@ -55,7 +55,7 @@ export function createServer(options: CouncilOptions = {}): McpServer {
   const server = new McpServer(
     { name: "diverdict", version: VERSION },
     {
-      instructions: `异策 Diverdict：独立出策 → 交叉质询 → 贾诩收敛。服务本身不调用模型。\n${BEGIN_INSTRUCTIONS}\n${HOST_INSTRUCTIONS}`,
+      instructions: `三思 Diverdict：独立出策 → 交叉质询 → 贾诩收敛。服务本身不调用模型。\n${BEGIN_INSTRUCTIONS}\n${HOST_INSTRUCTIONS}`,
     },
   );
   const annotations = {
@@ -66,7 +66,7 @@ export function createServer(options: CouncilOptions = {}): McpServer {
   server.registerTool(
     "strategize_begin",
     {
-      title: "开始异策：独立出策",
+      title: "开始三思：独立出策",
       description: `对重要决策启动三家独立出策。${BEGIN_INSTRUCTIONS}返回三个独立 job 和宿主执行指令；宿主执行后调用 strategize_submit。服务不生成策略，不需 API key。`,
       inputSchema: beginSchema,
       outputSchema: packetSchema,

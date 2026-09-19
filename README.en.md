@@ -1,4 +1,4 @@
-# Diverdict · 异策
+# Diverdict · 三思
 
 **Independent perspectives. Adversarial questioning. One final decision.**
 
@@ -8,7 +8,7 @@ Diverdict is a small, host-powered MCP server. A strategist examines time and po
 
 The server assembles prompts and advances the workflow. It contains no model calls, API keys, telemetry, or remote backend. Your existing agent supplies the model and execution capabilities.
 
-The product name is **异策 · Diverdict**. The repository, directory, npm package, CLI, and MCP server identifier all use `diverdict`. The name combines *diverge* and *verdict*: from disagreement to a decision. The original core and handoff documents retain their historical titles and exact bytes.
+The product name is **三思 · Diverdict**. The repository, directory, npm package, CLI, and MCP server identifier all use `diverdict`. The name combines *diverge* and *verdict*: from disagreement to a decision. The original core and handoff documents retain their historical titles and exact bytes.
 
 ## Quick start
 

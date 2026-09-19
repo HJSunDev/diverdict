@@ -7,7 +7,7 @@ if (args.length === 1 && (args[0] === "--version" || args[0] === "-v")) {
   process.stdout.write(`${VERSION}\n`);
 } else if (args.length === 1 && (args[0] === "--help" || args[0] === "-h")) {
   process.stdout.write(
-    `异策 Diverdict ${VERSION}\n\nUsage: diverdict [--help | --version]\n\n不带参数时启动 stdio MCP server。stdout 仅用于 MCP 协议。\n不需要 API key；宿主执行 3 + 3 + 1 次隔离生成。\n`,
+    `三思 Diverdict ${VERSION}\n\nUsage: diverdict [--help | --version]\n\n不带参数时启动 stdio MCP server。stdout 仅用于 MCP 协议。\n不需要 API key；宿主执行 3 + 3 + 1 次隔离生成。\n`,
   );
 } else if (args.length > 0) {
   process.stderr.write("Unknown arguments. Use --help.\n");

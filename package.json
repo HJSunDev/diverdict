@@ -1,7 +1,7 @@
 {
   "name": "diverdict",
   "version": "0.1.0",
-  "description": "异策 Diverdict：三家独立出策、交叉质询、贾诩收敛。由宿主提供智能的 MCP server。",
+  "description": "三思 Diverdict：三家独立出策、交叉质询、贾诩收敛。由宿主提供智能的 MCP server。",
   "type": "module",
   "license": "MIT",
   "engines": {
