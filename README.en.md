@@ -60,7 +60,7 @@ npm run test:coverage
 npm run package:check
 ```
 
-Tests exercise the unchanged core, isolated material, complete workflow, validation, state ordering, retry conflicts, expiry, resource bounds, concurrent sessions, CLI behavior, and real stdio handshakes, including 2025-era MCP clients. Fixture tests are not evidence of strategy quality; see [evaluation](docs/engineering/evaluation.md) and [validation](docs/delivery/validation.md).
+Tests exercise the unchanged core, isolated material, complete workflow, validation, state ordering, retry conflicts, expiry, resource bounds, concurrent sessions, CLI behavior, and real stdio handshakes, including 2025-era MCP clients. CI covers Node.js 22/24 on Windows, Linux, and macOS. Fixture tests are not evidence of strategy quality; see [evaluation](docs/engineering/evaluation.md) and [validation](docs/delivery/validation.md).
 
 No UI, persistent memory, multi-model routing, configurable role packs, or built-in model provider is included. See [architecture](docs/architecture/README.md), [security](SECURITY.md), and [release preparation](docs/engineering/releasing.md). Documentation beyond this overview is primarily Chinese.
 

@@ -1,0 +1,17 @@
+name: 功能或接入建议
+description: 先描述真实需求，再讨论实现
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 当前无法完成什么？
+      description: 描述具体使用场景、已有方案及不足。
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建议与取舍
+      description: 是否影响固定三拍、原始角色、宿主自选执行或无内置智能的边界？
+    validations:
+      required: true
