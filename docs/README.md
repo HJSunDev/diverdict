@@ -27,4 +27,4 @@
 - 根目录保留 [贡献指南](../CONTRIBUTING.md)、[安全政策](../SECURITY.md)、[行为准则](../CODE_OF_CONDUCT.md)、[变更记录](../CHANGELOG.md) 和 [许可证](../LICENSE) 等标准开源入口。
 - `examples/` 只放可直接使用的 [MCP 配置](../examples/mcp.json) 和 [公开案例输入](../examples/pilot-decision.json)，生成结果归入 `delivery/`。
 
-当前未建立的目录不补空文件。
+当前未建立的目录不补空文件。文档新建、归属判断或迁移遵循源码仓库中的 `.agents/skills/maintain-project-docs/SKILL.md`；目标职责明确的普通内容修改不触发目录重组。
