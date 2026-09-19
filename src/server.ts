@@ -10,7 +10,7 @@ import {
   verdictSchema,
 } from "./contracts.js";
 import { Council, type CouncilOptions } from "./council.js";
-import { HOST_INSTRUCTIONS } from "./prompts.js";
+import { BEGIN_INSTRUCTIONS, HOST_INSTRUCTIONS } from "./prompts.js";
 
 export const VERSION: string = JSON.parse(
   readFileSync(new URL("../package.json", import.meta.url), "utf8"),
@@ -55,7 +55,7 @@ export function createServer(options: CouncilOptions = {}): McpServer {
   const server = new McpServer(
     { name: "diverdict", version: VERSION },
     {
-      instructions: `异策 Diverdict：独立出策 → 交叉质询 → 贾诩收敛。服务本身不调用模型。\n${HOST_INSTRUCTIONS}`,
+      instructions: `异策 Diverdict：独立出策 → 交叉质询 → 贾诩收敛。服务本身不调用模型。\n${BEGIN_INSTRUCTIONS}\n${HOST_INSTRUCTIONS}`,
     },
   );
   const annotations = {
@@ -67,8 +67,7 @@ export function createServer(options: CouncilOptions = {}): McpServer {
     "strategize_begin",
     {
       title: "开始异策：独立出策",
-      description:
-        "对重要决策启动三家独立出策。返回三个独立 job 和宿主执行指令；宿主执行后调用 strategize_submit。服务不生成策略，不需 API key。",
+      description: `对重要决策启动三家独立出策。${BEGIN_INSTRUCTIONS}返回三个独立 job 和宿主执行指令；宿主执行后调用 strategize_submit。服务不生成策略，不需 API key。`,
       inputSchema: beginSchema,
       outputSchema: packetSchema,
       annotations: { ...annotations, idempotentHint: false },

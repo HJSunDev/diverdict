@@ -45,6 +45,8 @@ codex mcp get diverdict
 
 Codex 负责选择自己的隔离执行机制并完成生成，不需要你手工搬运三家的答案。工具目录中应出现 `strategize_begin`、`strategize_submit`、`strategize_verdict`。
 
+调用前，宿主必须把需求 `problem` 与背景 `context` 一并提交，不能省略背景字段。背景来自当前可用对话及已读材料，保留相关事实和最新更正，不只传最后一句问题、文件路径或链接。用户不必重复已有信息；确无额外背景时明确说明，关键缺失才澄清，用户要求直接判断时注明未知后继续。不编造，也不复制整段历史。[背景传递规则](docs/architecture/protocol.md)
+
 **接入 MCP 不等于获得隔离能力。** 宿主还需要能运行同模型的独立实例，按要求禁用其工具、文件和网络权限。只读文件沙箱不等于无工具权限。能力由宿主提供，本服务不假装替宿主保证隔离，也不加入执行机制审计。[接入边界与排障](docs/engineering/clients.md)
 
 > 当前交付支持从源码或本地 `.tgz` 安装。尚未发布到公共 npm registry；不要假设 `npx diverdict` 已可用。

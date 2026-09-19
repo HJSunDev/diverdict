@@ -32,12 +32,12 @@ export const responsesSchema = z.strictObject({
 export type Responses = z.infer<typeof responsesSchema>;
 
 export const beginSchema = z.strictObject({
-  problem: nonblank(LIMITS.problem).describe("需要决断的具体问题。"),
-  context: z
-    .string()
-    .max(LIMITS.context)
-    .default("")
-    .describe("用户的背景、处境、所求及已知材料。"),
+  problem: nonblank(LIMITS.problem).describe(
+    "需要决断的具体问题，明确对象和选项；展开‘这个、刚才的方案’等指代，使未见过对话的实例也能理解。",
+  ),
+  context: nonblank(LIMITS.context).describe(
+    "必填的决策背景：整理当前可用对话及已读材料中的相关目标、处境、约束、偏好和事实，保留影响判断的细节及用户最新更正。不能只给文件路径、链接或‘见上文’。区分事实、推测与未知，不编造或复制整段历史、宿主指令。确无额外背景时明确说明；关键缺失先澄清，用户要求直接判断时注明信息局限。",
+  ),
   request_id: z
     .string()
     .min(1)

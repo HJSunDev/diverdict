@@ -139,9 +139,9 @@ test("cannot skip proposal submission", () => {
 
 test("partial, extra, blank, over-limit and invalid payloads cannot advance state", () => {
   const council = new Council();
-  assert.throws(() => council.begin({ problem: "   " }));
+  assert.throws(() => council.begin({ ...input, problem: "   " }));
   assert.throws(() =>
-    council.begin({ problem: "a".repeat(LIMITS.problem + 1) }),
+    council.begin({ ...input, problem: "a".repeat(LIMITS.problem + 1) }),
   );
   assert.throws(() =>
     council.begin({ ...input, context: "a".repeat(LIMITS.context + 1) }),
@@ -177,7 +177,10 @@ test("unknown sessions and independent Council instances never share material", 
     () => a.submit({ session_id: randomUUID(), proposals }),
     errorCode("SESSION_NOT_FOUND"),
   );
-  const isolated = a.begin({ problem: "unrelated decision" });
+  const isolated = a.begin({
+    problem: "unrelated decision",
+    context: "无额外已知背景。",
+  });
   assert.ok(!JSON.stringify(isolated).includes(input.context));
 });
 
@@ -192,7 +195,8 @@ test("all three calls are retryable with stable material; conflicts never overwr
   assert.deepEqual(council.verdict({ session_id, critiques }), final);
   assert.deepEqual(council.begin({ ...input, request_id: "retry-1" }), begin);
   assert.throws(
-    () => council.begin({ problem: "different", request_id: "retry-1" }),
+    () =>
+      council.begin({ ...input, problem: "different", request_id: "retry-1" }),
     errorCode("REQUEST_CONFLICT"),
   );
   assert.throws(
@@ -243,7 +247,11 @@ test("sessions expire at the boundary, freeing capacity and request ids", () => 
     () => council.verdict({ session_id: first.session_id, critiques }),
     errorCode("SESSION_NOT_FOUND"),
   );
-  const next = council.begin({ problem: "new", request_id: "expiry" });
+  const next = council.begin({
+    ...input,
+    problem: "new",
+    request_id: "expiry",
+  });
   assert.notEqual(next.session_id, first.session_id);
 });
 

@@ -49,6 +49,7 @@ test("real stdio server advertises three tools and completes the protocol round 
   };
   const first = await call("strategize_begin", {
     problem: "是否发布？",
+    context: "两人团队，只有六周窗口。",
     request_id: "stdio-test",
   });
   const second = await call("strategize_submit", {
@@ -82,12 +83,12 @@ test("protocol errors are recoverable and do not expose submitted material", {
   assert.ok(!JSON.stringify(missing).includes(answers.strategist));
   const invalid = await client.callTool({
     name: "strategize_begin",
-    arguments: { problem: "" },
+    arguments: { problem: "", context: "测试背景" },
   });
   assert.equal(invalid.isError, true);
   const valid = await client.callTool({
     name: "strategize_begin",
-    arguments: { problem: "正常问题" },
+    arguments: { problem: "正常问题", context: "无额外已知背景。" },
   });
   assert.ok(!valid.isError);
 });
@@ -98,7 +99,10 @@ test("simultaneous sessions on one MCP connection remain independent", {
   const client = await connect(t);
   const results = await Promise.all(
     ["alpha-only", "beta-only", "gamma-only"].map((problem) =>
-      client.callTool({ name: "strategize_begin", arguments: { problem } }),
+      client.callTool({
+        name: "strategize_begin",
+        arguments: { problem, context: `${problem}-context` },
+      }),
     ),
   );
   assert.equal(
@@ -162,7 +166,7 @@ test("2025-06-18 clients can initialize and call tools without a v2 probe", {
   assert.equal(listed.result.tools.length, 3);
   const called = await request(3, "tools/call", {
     name: "strategize_begin",
-    arguments: { problem: "legacy client" },
+    arguments: { problem: "legacy client", context: "legacy context" },
   });
   assert.equal(called.result.structuredContent.jobs.length, 3);
 });

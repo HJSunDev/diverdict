@@ -27,7 +27,7 @@ test("many interleaved decisions preserve each decision's causal material", () =
   const decisions = Array.from({ length: LIMITS.sessions }, (_, i) => {
     const problem = `problem-${i}`;
     return {
-      packet: council.begin({ problem }),
+      packet: council.begin({ problem, context: `context-${i}` }),
       problem,
       proposals: Object.fromEntries(
         ROLE_IDS.map((role) => [role, `${problem}-${role}`]),

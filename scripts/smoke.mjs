@@ -25,6 +25,7 @@ try {
   };
   const first = await call("strategize_begin", {
     problem: "协议烟测：是否先验证需求？",
+    context: "测试夹具：两人团队，六周窗口，预算有限。",
   });
   const answers = {
     strategist: "测试夹具：长期价值",

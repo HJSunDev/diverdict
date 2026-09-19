@@ -27,6 +27,8 @@ Open a new Codex task (restart the client if its MCP catalog has not refreshed) 
 
 The host handles all forwarding and model execution. Users do not manually shuttle responses. Public npm publication has **not** happened yet; use source or a locally packed `.tgz`, rather than assuming an `npx` registry command exists.
 
+Before calling `strategize_begin`, the host must supply both `problem` and a nonblank `context`. Gather relevant facts, goals, constraints, preferences, and the user's latest corrections from the available conversation and materials already read. Resolve ambiguous references and include the relevant content, not just file paths, URLs, or the latest message. Users should not have to repeat known information. If no additional background is known, say so explicitly. Clarify material gaps unless the user requests a decision with the available information; identify assumptions, conflicts, and unknowns without inventing facts. Do not copy the entire history or host instructions. The server cannot inspect the host's conversation or verify completeness. Existing callers must now provide `context`; refresh the tool catalog or reconnect after updating. See the [context handoff rules](docs/architecture/protocol.md).
+
 ## The contract
 
 | Tool | Input | Returned work |
