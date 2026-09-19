@@ -1,112 +1,125 @@
-# 三思 · Diverdict
+<p align="center">
+  <img src="assets/brand/hero.svg" width="100%" alt="三思 · Diverdict：三家独立出策，交叉质询，由贾诩给出最终方略与最脆弱的一环。">
+</p>
 
-**三家独立出策，交叉质询，一锤定策。**
+<p align="center">
+  <a href="README.en.md">English</a> ·
+  <a href="#安装">安装</a> ·
+  <a href="docs/delivery/pilot-result.md">真实案例</a> ·
+  <a href="docs/README.md">文档</a> ·
+  <a href="CONTRIBUTING.md">参与贡献</a>
+</p>
 
-[English](README.en.md) · [文档入口](docs/README.md) · [接入指南](docs/engineering/clients.md) · [工具协议](docs/architecture/protocol.md) · [架构](docs/architecture/README.md) · [贡献](CONTRIBUTING.md) · [MIT](LICENSE)
+**三思（Diverdict）是一个把独立视角转化为行动方略的 MCP 服务。** 战略家看时间，纵横家看关系，阴谋家看风险；三家独立出策、交叉质询，再由贾诩给出最终方略，指出其中最脆弱的一环。
 
-三思（Diverdict）是一个轻量的 MCP server。战略家看时间，纵横家看关系，阴谋家看风险；三家各自出策、交叉质询，再由贾诩结合全部材料给出最终方略及最脆弱的一环。
+模型与执行能力由宿主提供。**本地 stdio · 无内置模型 API · 无遥测 · MIT**
 
-模型、认证和生成能力来自你正在使用的智能体。服务只负责提示词拼装与流程推进，无模型 API、无 API key、无遥测、无远程后端。
+## 安装
 
-```mermaid
-flowchart LR
-    Q[问题与背景] --> A[三家并行独立出策]
-    A --> B[三家并行交叉质询]
-    B --> C[贾诩独立收敛]
-    C --> D[最终方略 + 最脆弱的一环]
-```
+源码安装需要 **Git、Node.js 22+ 和 npm**。宿主须支持本地 stdio MCP，以及同模型、无历史继承、无工具 / 文件 / 网络权限的隔离生成。仅有 MCP 连接能力不足以执行完整流程。
 
-## 五分钟接入 Codex
+### 构建与验证
 
-需要 **Node.js 22+**、npm，以及已经登录的 Codex。下载或克隆本仓库后，在仓库根目录运行：
+安装目录和 Node 必须能被宿主持续访问。已有 checkout 可从 `npm ci` 开始；各命令成功后再执行下一步。
 
 ```sh
+git clone https://github.com/HJSunDev/diverdict.git
+cd diverdict
+node --version
 npm ci
 npm run build
 npm run smoke
 ```
 
-注册本地入口。路径必须是你机器上的**绝对路径**，不依赖 Codex 当前工作目录：
+烟测成功输出 `PASS: stdio handshake, tools/list, three-stage 3+3+1 flow`，使用测试夹具，不调用模型。当前支持源码或本地 `.tgz` 安装，尚未发布到公共 npm registry。
 
-```sh
-codex mcp add diverdict -- node /absolute/path/diverdict/dist/cli.js
-```
+### 注册到 Codex
 
-Windows 示例：
+在仓库根目录执行。命令自动解析绝对路径，支持路径含空格；已有有效配置可复用。
+
+**PowerShell**
 
 ```powershell
-codex mcp add diverdict -- node E:\DEV\diverdict\dist\cli.js
-codex mcp get diverdict
+$diverdictNode = node -p "process.execPath"
+$diverdictEntry = node -p "require('node:path').resolve('dist/cli.js')"
+codex mcp add diverdict -- "$diverdictNode" "$diverdictEntry"
+codex mcp get diverdict --json
 ```
 
-在 Codex 中新开一个任务；若当前客户端尚未刷新 MCP 配置，重新启动客户端。然后说：
+**Bash / Zsh**
 
-> 用 diverdict 帮我做一次策略合议：我们是一个两人团队，已有可用原型，只有六周时间。应该先服务三家明确有需求的客户，还是先公开发布？请执行完整的独立出策、质询、贾诩收敛流程，给出最终方略和最脆弱的一环。
+```sh
+diverdict_node="$(node -p 'process.execPath')"
+diverdict_entry="$(node -p 'require("node:path").resolve("dist/cli.js")')"
+codex mcp add diverdict -- "$diverdict_node" "$diverdict_entry"
+codex mcp get diverdict --json
+```
 
-Codex 负责选择自己的隔离执行机制并完成生成，不需要你手工搬运三家的答案。工具目录中应出现 `strategize_begin`、`strategize_submit`、`strategize_verdict`。
+以上写入 Codex 用户级配置。项目级配置、无 CLI 配置及其他宿主见[接入指南](docs/engineering/clients.md)。stdio 进程由宿主启动，无需另行常驻运行；模型认证与额度由宿主提供，无需额外 API key。
 
-调用前，宿主必须把需求 `problem` 与背景 `context` 一并提交，不能省略背景字段。背景来自当前可用对话及已读材料，保留相关事实和最新更正，不只传最后一句问题、文件路径或链接。用户不必重复已有信息；确无额外背景时明确说明，关键缺失才澄清，用户要求直接判断时注明未知后继续。不编造，也不复制整段历史。[背景传递规则](docs/architecture/protocol.md)
+注册后刷新工具目录，确认 `strategize_begin`、`strategize_submit`、`strategize_verdict` 可调用；工具前缀以宿主实际目录为准。不支持刷新时新开任务或重启客户端。`mcp get` 只验证配置，源码烟测只验证协议，均不代表当前宿主已接通。
 
-**接入 MCP 不等于获得隔离能力。** 宿主还需要能运行同模型的独立实例，按要求禁用其工具、文件和网络权限。只读文件沙箱不等于无工具权限。能力由宿主提供，本服务不假装替宿主保证隔离，也不加入执行机制审计。[接入边界与排障](docs/engineering/clients.md)
+## 调用协议
 
-> 当前交付支持从源码或本地 `.tgz` 安装。尚未发布到公共 npm registry；不要假设 `npx diverdict` 已可用。
+`strategize_begin` 的 `problem` 与非空 `context` 均为必填。背景应包含已有对话及已读材料中的相关目标、选项、约束、偏好、事实与最新更正，展开指代，区分事实、推测与未知。文件路径、链接或“见上文”不能代替实际材料。
 
-## 如何工作
+确无额外背景时明确说明；关键缺失才澄清，用户要求直接判断时注明未知后继续。背景不包含整段历史、宿主指令或预设结论。
 
-| 步骤 | MCP 工具 | 服务返回 | 宿主执行 |
-| --- | --- | --- | --- |
-| 出策 | `strategize_begin` | 三个独立角色的提示词和共同问题材料 | 并行生成三家方略 |
-| 质询 | `strategize_submit` | 每家身份、自己的方略、另两家方略、质询纪律 | 并行生成三家质询 |
-| 收敛 | `strategize_verdict` | 贾诩身份与全部方略、质询 | 独立生成最终决断，呈现给用户 |
+**在同一 MCP 连接中完成三次调用，并保留返回的 `session_id`：**
 
-共 **3 + 3 + 1 次生成**。第三个工具返回的是贾诩的任务，宿主仍需完成这次生成，不能把提示词当成最终答案。
+| 调用 | 参数 | 宿主执行 |
+| --- | --- | --- |
+| `strategize_begin` | `problem`、`context`；可选 `request_id` | 并行执行 3 个出策 job |
+| `strategize_submit` | `session_id`、`proposals` | 并行执行 3 个质询 job |
+| `strategize_verdict` | `session_id`、`critiques` | 执行 `arbiter` job，返回最终方略与最脆弱的一环 |
 
-已用 Codex 与 GPT-6 Astra 运行公开案例：[查看真实最终方略](docs/delivery/pilot-result.md)。完整验证条件与宿主调度观察见[验证记录](docs/delivery/validation.md)。
+共 **3 + 3 + 1 次生成**，使用同一个模型，无讨论循环或动态打回。
 
-第一轮三家互不可见。第二轮只共享第一轮材料，不共享尚未完成的同轮质询。所有实例使用同一个模型，仅收到对应任务材料，不继承宿主对话，也不在同一上下文中连续扮演角色。
+`proposals` 和 `critiques` 均按 `job.role` 收集完整原文，包含 `strategist`、`diplomat`、`schemer` 三个键。每轮全部完成后才进入下一阶段。
 
-流程固定，无循环，无动态打回。质询纪律保留原文：只攻不和；修订只许因被击中；贾诩终审，无二审。
+成功响应优先读取 `structuredContent`，未提供时解析等价的 JSON 文本。`instructions` 供宿主执行；每个新的隔离实例只接收对应 job 的 `system_prompt` 和 `user_prompt` 原文，不继承宿主历史或其他 job。无独立 system 通道时，将身份置于实例指令并保留其优先级。三家质询互不可见。
 
-## 名称
+**`next_tool: null` 后仍需生成贾诩的最终答案。** 最后一个工具返回任务，不返回结论；无第四次工具调用。
 
-产品名为「三思 · Diverdict」，仓库、目录、npm 包、命令行入口与 MCP 服务标识统一使用 `diverdict`。Diverdict 结合 diverge（分歧）与 verdict（裁断）的词意，表达从分歧走向决断。原始核心及交接文档保留历史名称，不随产品改名重写。
+工具错误不进入生成流程。重试复用原请求及原文；更换连接、重启或过期后重新 begin。超限结果不得截断或以摘要替代。字段限制、JSON 示例和错误恢复见[完整协议](docs/architecture/protocol.md)。
 
-## 核心资产
+## 真实案例
 
-[`advisors.md`](docs/product/advisors.md) 是四位角色和工作纪律的唯一正文来源。运行时直接读取，代码不维护第二份角色提示词。测试固定该文件的 SHA-256，防止工程修改意外改变已定的产品核心。
+两人团队，有可用原型，只有六周：**先服务三家意向客户，还是先公开发布？**
 
-设计遵循“相信模型、留白”：明确身份和规则，把思考与执行机制留给模型。现有角色中的补充指引原样保留。文档中标为“非落地依据”的未来推演不会进入运行提示词。
+Codex / GPT-6 Astra 实测结果（节选）：
 
-源码仓库中的 `docs/origin/HANDOFF.md` 保留实现前的设计交接历史，不随 npm 包分发；其中的待办和宿主支持判断属于当时记录。当前实现状态以本 README、[验证说明](docs/delivery/validation.md)和[变更记录](CHANGELOG.md)为准。
+> **先做受限试点，第一周就同步寻找原有三家之外的客户；六周内不把完整公开发布列为必做项。** 两周的文档与自助安装投入，必须由实际交付中的重复障碍来证明必要性。
 
-## 数据与生命周期
+> **最脆弱的一环，是这个市场的购买与使用周期能否装进六周。**
 
-- 服务进程只读随包分发的 `advisors.md` 与版本信息；不执行命令，不请求模型，不写决策日志。
-- 每条 MCP 连接维护独立的内存会话，最多 32 个；每个会话自创建起 2 小时有效，后续请求会清理过期数据。进程退出即丢失全部材料。
-- 重启或过期后重新开始合议。相同提交可重试，不同材料不会覆盖已经用于下一轮的材料。
-- 模型生成由宿主执行，会消耗宿主的订阅或模型额度；宿主自己的对话保存策略仍然适用。
+[阅读完整方略 →](docs/delivery/pilot-result.md) · [查看输入](examples/pilot-decision.json) · [查看验证条件](docs/delivery/validation.md)
 
-字段长度和错误恢复见[工具协议](docs/architecture/protocol.md)。
+这是一次真实输出，不是通用效果基准。验证记录同时保留了宿主在第二轮未完全并行的调度观察。
 
-## 开发与验证
+## 核心与数据
+
+[`advisors.md`](docs/product/advisors.md) 是角色与工作纪律的唯一来源，运行时直接读取，完整性由 SHA-256 测试验证。其中标记为未来推演的内容不进入运行提示词。
+
+服务仅拼装提示词和推进流程，不调用模型、不执行命令、不写决策日志。无 UI、长期记忆、多模型路由或可配置角色阵容。
+
+每条连接最多保留 32 个内存会话，自创建起 2 小时有效，后续请求清理过期数据。进程退出即丢失材料；宿主自身的对话保存策略仍然适用。
+
+源码中的 `docs/origin/HANDOFF.md` 为原始设计交接记录，不随 npm 包分发。
+
+## 开发与贡献
 
 ```sh
 npm ci
-npm run check          # 类型检查、格式/静态检查、单元及真实 stdio 测试
-npm run test:coverage  # Node 内置覆盖率报告
-npm run package:check  # 打包、独立安装、从安装包运行完整协议烟测
+npm run check          # 类型、格式、静态检查及协议测试
+npm run test:coverage  # Node 内置覆盖率
+npm run package:check  # 打包、独立安装与完整协议烟测
 ```
 
-自动测试覆盖角色原文、隔离材料、3+3+1 流程、缺失输入、乱序调用、重试冲突、过期、容量、并发会话、CLI 和新旧 MCP 客户端握手。CI 在 Windows、Linux、macOS 上验证 Node.js 22/24。
+CI 覆盖 Windows、Linux、macOS 与 Node.js 22/24。测试验证原文完整性、隔离材料、工作流、状态与资源边界、CLI 及新旧 MCP 客户端握手。
 
-协议测试使用明确标注的夹具；它们验证工程行为，不证明多视角策略一定优于单模型回答。真实生成需要另做[效果评估](docs/engineering/evaluation.md)。
+[贡献指南](CONTRIBUTING.md) · [效果评估](docs/engineering/evaluation.md) · [架构](docs/architecture/README.md) · [安全政策](SECURITY.md) · [发布指南](docs/engineering/releasing.md) · [更新记录](CHANGELOG.md)
 
-## 项目边界
+---
 
-首版提供通用的“意图指令 + 宿主自选执行”形态。无 UI、长期记忆、多模型路由、动态讨论、角色阵容配置或内置模型通道。CLI 进程编排可以作为宿主的执行方法，不是服务的隐藏依赖。
-
-欢迎提交缺陷复现、接入验证和可重复的效果评估。开始前请读[贡献指南](CONTRIBUTING.md)；安全问题请按[安全政策](SECURITY.md)处理。发布流程见[维护指南](docs/engineering/releasing.md)。
-
-## 许可
-
-[MIT](LICENSE)。代码、角色提示词与工作流程文档一并适用。
+[MIT](LICENSE) · 代码、角色提示词与工作流程文档一并适用。

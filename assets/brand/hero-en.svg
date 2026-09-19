@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="380" viewBox="0 0 1200 380" role="img" aria-labelledby="title desc">
+  <title id="title">Diverdict · 三思</title>
+  <desc id="desc">A decision deliberation MCP server: three independent proposals, three cross-critiques, one final strategy and its weakest point.</desc>
+  <rect width="1200" height="380" rx="12" fill="#F5F2EA"/>
+  <g id="identity" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fill="#202D2A">
+    <text x="64" y="61" font-size="22" letter-spacing="3" fill="#596761">DECISION DELIBERATION / MCP</text>
+    <text x="60" y="178" font-size="96" font-weight="600" letter-spacing="-3">Diverdict</text>
+    <text x="64" y="257" font-size="28">Independent perspectives.</text>
+    <text x="64" y="297" font-size="28">One actionable decision.</text>
+  </g>
+  <g id="proposal-to-critique" fill="none" stroke="#C7CEC5" stroke-width="2">
+    <path d="M700 90H875 M700 190H875 M700 290H875"/>
+    <path d="M700 90L875 190 M700 90L875 290 M700 190L875 90 M700 190L875 290 M700 290L875 90 M700 290L875 190"/>
+  </g>
+  <g id="critique-to-verdict" fill="none" stroke="#B3442D" stroke-width="2.5">
+    <path d="M875 90C963 90 978 190 1070 190 M875 190H1070 M875 290C963 290 978 190 1070 190"/>
+  </g>
+  <g id="independent-jobs" fill="#F5F2EA" stroke="#202D2A" stroke-width="3">
+    <circle cx="700" cy="90" r="14"/><circle cx="700" cy="190" r="14"/><circle cx="700" cy="290" r="14"/>
+    <circle cx="875" cy="90" r="14"/><circle cx="875" cy="190" r="14"/><circle cx="875" cy="290" r="14"/>
+  </g>
+  <circle id="final-verdict" cx="1070" cy="190" r="21" fill="#B3442D"/>
+  <path d="m1060 190 7 7 13-15" fill="none" stroke="#F5F2EA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <g id="stages" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" text-anchor="middle" fill="#596761">
+    <text x="700" y="342">3 proposals</text><text x="875" y="342">3 critiques</text><text x="1070" y="342" fill="#B3442D">1 verdict</text>
+  </g>
+</svg>

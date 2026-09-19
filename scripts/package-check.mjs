@@ -63,6 +63,8 @@ try {
     "LICENSE",
     "README.md",
     "README.en.md",
+    "assets/brand/hero.svg",
+    "assets/brand/hero-en.svg",
     "dist/cli.js",
     "dist/index.d.ts",
     "docs/README.md",
