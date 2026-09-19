@@ -1,0 +1,5 @@
+* text=auto eol=lf
+docs/product/advisors.md -text
+docs/origin/HANDOFF.md -text
+*.png binary
+*.tgz binary
